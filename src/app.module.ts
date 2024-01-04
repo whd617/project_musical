@@ -3,11 +3,8 @@ import Joi from 'joi';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TicketBook } from './ticket-book/entities/ticket-book.entity';
-import { TicketBookModule } from './ticket-book/ticket-book.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -19,7 +16,7 @@ const typeOrmModuleOptions = {
     username: configService.get('DB_USERNAME'),
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_NAME'),
-    entities: [TicketBook],
+    entities: [],
     synchronize: configService.get('DB_SYNC'),
     logging: true,
   }),
@@ -40,9 +37,10 @@ const typeOrmModuleOptions = {
       }),
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
-    TicketBookModule,
+    UserModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
